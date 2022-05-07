@@ -82,8 +82,8 @@ run().catch(console.dir);
 
 //
 app.get("/", (req, res) => {
-  res.send("Running my genius car services port:" + port);
+  res.send("running my electro-house server port:" + port);
 });
 app.listen(port, () => {
-  console.log("Genius Car Server Is Running, Port " + port);
+  console.log("electro-house server is running, Port " + port);
 });
