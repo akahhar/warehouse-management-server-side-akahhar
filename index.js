@@ -26,39 +26,39 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     await client.connect();
-    const servicesCollection = client.db("geniusCar").collection("services");
+    const itemsCollection = client.db("geniusCar").collection("services");
     //get data
-    app.get("/service", async (req, res) => {
+    app.get("/items", async (req, res) => {
       const query = {}; //get all information
-      const cursor = servicesCollection.find(query);
-      const services = await cursor.toArray();
-      res.send(services);
+      const cursor = itemsCollection.find(query);
+      const items = await cursor.toArray();
+      res.send(items);
     });
 
     //get single user by id
-    app.get('/service/:id', async (req,res) => {
+    app.get('/items/:id', async (req,res) => {
         const id = req.params.id;
         const query = {_id : ObjectId(id)};
-        const result = await servicesCollection.findOne(query);
+        const result = await itemsCollection.findOne(query);
         res.send(result);
     })
 
     //post data
-    app.post('/service' , async (req,res) => {
+    app.post('/items' , async (req,res) => {
         const newServices = req.body;
-        const result = await servicesCollection.insertOne(newServices);
+        const result = await itemsCollection.insertOne(newServices);
         res.send(result)
     })
     //delete a user
-    app.delete('/service/:id', async (req,res) => {
+    app.delete('/items/:id', async (req,res) => {
         const id = req.params.id;
         const query = {_id : ObjectId(id)};
-        const result = await servicesCollection.deleteOne(query);
+        const result = await itemsCollection.deleteOne(query);
         res.send(result);
     })
 
     //update data by id
-    app.put('/service/:id', async (req,res) => {
+    app.put('/items/:id', async (req,res) => {
         const id = req.params.id;
         const updateUser = req.body;
         const filter = {_id : ObjectId(id)};
@@ -71,7 +71,7 @@ async function run() {
                 img : updateUser.img
             }
         }
-        const result = await servicesCollection.updateOne(filter, updateDoc, options);
+        const result = await itemsCollection.updateOne(filter, updateDoc, options);
         res.send(result);
     })
   } finally {
