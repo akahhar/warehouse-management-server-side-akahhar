@@ -26,7 +26,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     await client.connect();
-    const itemsCollection = client.db("geniusCar").collection("services");
+    const itemsCollection = client.db("electro-house").collection("laptops");
     //get data
     app.get("/items", async (req, res) => {
       const query = {}; //get all information
@@ -74,6 +74,46 @@ async function run() {
         const result = await itemsCollection.updateOne(filter, updateDoc, options);
         res.send(result);
     })
+    // updateQuantity by id
+    app.put('/updateQuantity/:id', async (req,res) => {
+        const id = req.params.id;
+        const updateQuantity = req.body;
+   
+        //get single ITEM by id
+        const query = {_id : ObjectId(id)};
+        const result2 = await itemsCollection.findOne(query);
+        
+        const filter = {_id : ObjectId(id)};
+        const options = { upsert: true };
+        const updateDoc = {
+            $set: {
+              quantity : parseInt(updateQuantity.quantity) + parseInt(result2.quantity)
+            }
+        }
+        const result = await itemsCollection.updateOne(filter, updateDoc, options);
+        res.send(result);
+    })
+    // delivered by id
+    app.put('/delivered/:id', async (req,res) => {
+        const id = req.params.id;
+   
+      //get single ITEM by id
+      const query = {_id : ObjectId(id)};
+      const result2 = await itemsCollection.findOne(query);
+        
+        const filter = {_id : ObjectId(id)};
+        const options = { upsert: true };
+        const updateDoc = {
+            $set: {
+              quantity : parseInt(result2.quantity) - 1
+            }
+        }
+        const result = await itemsCollection.updateOne(filter, updateDoc, options);
+        res.send(result);
+    })
+
+
+    
   } finally {
     // await client.close();
   }
