@@ -31,7 +31,6 @@ async function run() {
     //add items
     app.post("/addItems", async(req,res) => {
       const newItem = req.body;
-      console.log(newItem);
       const result = await itemsCollection.insertOne(newItem);
       res.send(result);
     })
@@ -44,12 +43,20 @@ async function run() {
       res.send(items);
     });
 
-    //get single user by id
+    //get single item by id
     app.get('/items/:id', async (req,res) => {
         const id = req.params.id;
         const query = {_id : ObjectId(id)};
         const result = await itemsCollection.findOne(query);
         res.send(result);
+    })
+    //get single item by user email
+    app.get('/user_items/:email', async (req,res) => {
+        const email = req.params.email;
+        const query = {email : email};
+        const cursor = itemsCollection.find(query);
+        const items = await cursor.toArray();
+        res.send(items);
     })
 
     //post data
