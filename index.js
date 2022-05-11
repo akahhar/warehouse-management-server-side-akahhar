@@ -27,6 +27,15 @@ async function run() {
   try {
     await client.connect();
     const itemsCollection = client.db("electro-house").collection("laptops");
+
+    //add items
+    app.post("/addItems", async(req,res) => {
+      const newItem = req.body;
+      console.log(newItem);
+      const result = await itemsCollection.insertOne(newItem);
+      res.send(result);
+    })
+
     //get data
     app.get("/items", async (req, res) => {
       const query = {}; //get all information
@@ -49,8 +58,8 @@ async function run() {
         const result = await itemsCollection.insertOne(newServices);
         res.send(result)
     })
-    //delete a user
-    app.delete('/items/:id', async (req,res) => {
+    //delete a itme
+    app.delete('/delteItem/:id', async (req,res) => {
         const id = req.params.id;
         const query = {_id : ObjectId(id)};
         const result = await itemsCollection.deleteOne(query);
