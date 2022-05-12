@@ -25,7 +25,6 @@ function verifyJWT(req, res, next) {
     if (error) {
       return res.status(403).send({ message: "Forbidden acccess" });
     }
-    // console.log("decoded", decoded);
     req.decoded = decoded;
     next();
   });
@@ -50,6 +49,7 @@ async function run() {
     // AUTH token
     app.post("/userToken", async (req, res) => {
       const user = req.body;
+      
       
       const userAccessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
         expiresIn: "1d",
